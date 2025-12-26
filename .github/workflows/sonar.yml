@@ -28,7 +28,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=Chhaviroy_CURRENCY_CONVERTER
-            -Dsonar.organization=Chhavi
+            -Dsonar.organization=chhaviroy
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
