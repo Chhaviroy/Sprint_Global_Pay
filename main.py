@@ -1,13 +1,25 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from exchange_rates import exchange_rates
+import json
 
-app = FastAPI(title="CurrencyConverterWebService")#fastapi object
+app = FastAPI(title="CurrencyConverterWebService")
 
 templates = Jinja2Templates(directory="templates")
 
-# ---------------- FRONTEND PAGES ----------------
+
+# ---------------- JSON Utility Functions ---------------- #
+
+def load_rates():
+    with open("exchange_rates.json", "r") as file:
+        return json.load(file)  # returns dictionary
+
+def save_rates(data):
+    with open("exchange_rates.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+
+# ---------------- FRONTEND PAGES ---------------- #
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
@@ -18,18 +30,18 @@ def home(request: Request):
 def converter_page(request: Request):
     return templates.TemplateResponse("converter.html", {"request": request})
 
-# ---------------- BACKEND LOGIC ----------------
+
+# ---------------- BACKEND LOGIC ---------------- #
 
 def get_exchange_rate(from_currency, to_currency):
+    rates = load_rates()  # load from JSON
+
     try:
-        # Convert from source currency to USD
-        amount_in_usd = 1 / exchange_rates[from_currency]
-        # Convert from USD to target currency
-        rate = amount_in_usd * exchange_rates[to_currency]
+        amount_in_usd = 1 / rates[from_currency]
+        rate = amount_in_usd * rates[to_currency]
         return rate
     except KeyError:
         return None
-
 
 
 @app.get("/rate")
@@ -61,3 +73,16 @@ def convert_currency(fromCurrency: str, toCurrency: str, amount: float):
         "amount": amount,
         "convertedAmount": converted_amount
     }
+
+
+# ---------------- Update Rates API (optional to use) ---------------- #
+
+@app.post("/update-rate")
+def update_rate(currency: str, rate: float):
+    data = load_rates()
+    data[currency] = rate  # add/update
+
+    save_rates(data)
+
+    return {"message": f"Rate for {currency} updated successfully!", "new_rate": rate}
+
