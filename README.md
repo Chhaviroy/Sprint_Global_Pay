@@ -1,6 +1,6 @@
-# Currency Converter
+# Sprint Global Pay
 
-A simple **Currency Converter** web application built using **FastAPI**.  
+A **Tourist helper** web application built using **FastAPI**.  
 This project allows users to convert between different currencies easily.  
 
 ## 🌐 Live Demo
