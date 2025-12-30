@@ -5,6 +5,7 @@ This project allows users to convert between different currencies easily.
 
 ## 🌐 Live Demo
 Check out the live project here: [https://sprintglobalpay.onrender.com](https://sprintglobalpay.onrender.com)
+(please wait for few seconds as render deployment may take some time to woke up the service)
 
 ## 🛠 Technology Stack
 - **Backend:** Python, FastAPI
